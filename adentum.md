@@ -229,3 +229,14 @@ Yang dipertahankan: `tool_choice auto`, satu langkah per tick (`stopWhen`
 validasi Zod + validator aturan + fallback deterministik tanpa retry, tanpa
 streaming. Skema strict tulisan tangan (`schemas.ts`) dihapus — skema Zod dikirim
 SDK, validasi akhir tetap di kode.
+
+## 12. Koreksi Entry API, putaran 2 (29 Okt 2026 — TERBUKTI via 500 produksi)
+
+Keputusan §9 ("`handle(app)` dari `hono/vercel`") **SALAH DAN DICABUT** — klaim
+"paket `@hono/vercel` tidak ada" juga keliru (itu justru lokasi baru resminya;
+subpath `hono/vercel` deprecated di Hono v4). Bukti: `handle(app)` modern hanya
+mengembalikan `(req) => app.fetch(req)`; karena bentuknya fungsi, Vercel
+memanggilnya sebagai handler Node `(req, res)` dan `app.fetch` menerima
+IncomingMessage → throw → 500 di semua rute. Panduan resmi Hono untuk Vercel
+menetapkan **`export default app`** (instance langsung). Entry `api/*.ts` kini
+bentuk itu; tidak memakai adapter apa pun.

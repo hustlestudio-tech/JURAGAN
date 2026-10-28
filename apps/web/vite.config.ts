@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': 'http://localhost:8787',
+      // Samakan dengan API_PORT saat dev:api dijalankan di port lain.
+      '/api': `http://localhost:${process.env.API_PORT ?? 8787}`,
     },
   },
 });

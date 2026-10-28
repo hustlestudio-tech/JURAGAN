@@ -58,8 +58,11 @@ Perintah: `bun install` · `bun test` · `bun check` (pemeriksa bawaan Bun, tanp
   migrasi dibuat via `drizzle-kit generate`, diterapkan via `bun run db:migrate`.
 - Pengecualian: `scripts/` (tooling dev-only: `dev-api.ts`, `smoke-llm.ts`)
   boleh memakai `Bun.serve` / `node:fs` / `process.env`. Tidak ikut ter-deploy.
-- Entry Vercel `api/*.ts` adalah file tipis WAJIB: `export default handle(app)` dari
-  `hono/vercel` + import RELATIF ke `../apps/api/src/*`. Seluruh logika rute di `apps/api`
+- Entry Vercel `api/*.ts` adalah file tipis WAJIB: `export default app` (instance Hono
+  langsung, sesuai panduan resmi Hono untuk Vercel) + import RELATIF ke
+  `../apps/api/src/*`. DILARANG membungkus dengan `handle()` dari `hono/vercel`
+  (deprecated; bentuk fungsi memicu Vercel memanggilnya sebagai handler Node
+  `(req, res)` sehingga `app.fetch` crash → 500). Seluruh logika rute di `apps/api`
   sebagai Hono murni (portable, tanpa API khusus Vercel).
 - DILARANG tsconfig path alias (`@/*`) di seluruh repo — pernah terbukti crash saat runtime
   di Vercel Bun (build lolos). Import antar-package via nama workspace (`@juragan/*`),
