@@ -1,5 +1,5 @@
 // BFS deterministik untuk grid 18x24 (adentum §1: ±40 baris, tanpa EasyStar).
-import type { TilePos } from "./types";
+import type { TilePos } from './types';
 
 // Urutan tetangga TETAP (atas, kiri, kanan, bawah) -> hasil deterministik.
 const DIRS: readonly (readonly [number, number])[] = [
@@ -21,7 +21,8 @@ export function findPath(
 ): TilePos[] | null {
   const rows = solid.length;
   const cols = solid[0]?.length ?? 0;
-  const inside = (x: number, y: number) => x >= 0 && y >= 0 && x < cols && y < rows;
+  const inside = (x: number, y: number) =>
+    x >= 0 && y >= 0 && x < cols && y < rows;
   if (!inside(from.x, from.y) || !inside(to.x, to.y)) return null;
   if (solid[from.y]?.[from.x] || solid[to.y]?.[to.x]) return null;
   if (from.x === to.x && from.y === to.y) return [];

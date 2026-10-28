@@ -18,15 +18,17 @@ untuk menggerakkan Vendor, **Market Shock** untuk kartu pasar, **Jalankan Minggu
 
 ## Perintah
 
-| Perintah            | Fungsi                                              |
-| ------------------- | --------------------------------------------------- |
-| `bun test`          | Unit test (BFS, sim-core, map, ai-client fallback)  |
-| `bun check`         | Typecheck seluruh repo (tsc noEmit)                 |
-| `bun run build`     | Build produksi `apps/web` ke `dist/`                |
-| `bun run dev:web`   | Hanya Vite dev server                               |
-| `bun run dev:api`   | Hanya API Hono lokal (port 8787)                    |
-| `bun run db:migrate`| Jalankan `packages/db/migrations/*.sql`            |
-| `bun run smoke:llm` | Gerbang smoke test model S2 (butuh `MODEL_API_KEY`) |
+| Perintah             | Fungsi                                              |
+| -------------------- | --------------------------------------------------- |
+| `bun test`           | Unit test (BFS, sim-core, map, ai-client fallback)  |
+| `bun check`          | Typecheck seluruh repo (pemeriksa bawaan Bun)       |
+| `bun fmt --check`    | Cek format seluruh repo (builtin, tanpa Prettier)   |
+| `bun fmt`            | Format seluruh repo (opsi di `bunfig.toml`)         |
+| `bun run build`      | Build produksi `apps/web` ke `dist/`                |
+| `bun run dev:web`    | Hanya Vite dev server                               |
+| `bun run dev:api`    | Hanya API Hono lokal (port 8787)                    |
+| `bun run db:migrate` | Terapkan migrasi Drizzle ke Neon (`drizzle-kit`)    |
+| `bun run smoke:llm`  | Gerbang smoke test model S2 (butuh `MODEL_API_KEY`) |
 
 ## Struktur
 
@@ -36,9 +38,9 @@ apps/api        Logika Hono murni & portable (createApp)
 api/            Entry tipis Vercel Functions: health, npc-tick, market-shock
 packages/content  Peta ASCII 18x24 + compiler, konsep, pasal, soal pilot, SUS, kurasi shock
 packages/sim-core Mesin simulasi murni: BFS, ekonomi, deterministic fallback (+ bun test)
-packages/ai-client  Raw fetch Meta Model API + Zod + fallback otomatis (+ bun test)
+packages/ai-client  AI SDK + Muse Spark (Zod + fallback otomatis, + bun test)
 packages/contracts  Skema Zod & tipe API bersama
-packages/db     Klien Neon HTTP + migrasi SQL
+packages/db     Drizzle ORM (neon-http) + skema + migrasi drizzle-kit
 scripts/        Tooling DEV-ONLY (dev-api, migrate, smoke-llm) — tidak ikut deploy
 ```
 
@@ -47,13 +49,13 @@ scripts/        Tooling DEV-ONLY (dev-api, migrate, smoke-llm) — tidak ikut de
 Salin `.env.example` ke `.env`. Semua key hanya dipakai server (`apps/api`, `api/`, `scripts/`)
 dan tidak pernah dibundel ke klien.
 
-| Variabel          | Wajib? | Keterangan                                      |
-| ----------------- | ------ | ----------------------------------------------- |
-| `MODEL_API_KEY`   | S2+    | Kunci Meta Model API; tanpa ini semua tick = fallback |
-| `META_MODEL_ID`   | Tidak  | Default `muse-spark-1.3`                        |
+| Variabel          | Wajib? | Keterangan                                                 |
+| ----------------- | ------ | ---------------------------------------------------------- |
+| `MODEL_API_KEY`   | S2+    | Kunci Meta Model API; tanpa ini semua tick = fallback      |
+| `META_MODEL_ID`   | Tidak  | Default `muse-spark-1.3`                                   |
 | `DATABASE_URL`    | S1+ops | Koneksi Neon; tanpa ini `/api/health` lapor `unconfigured` |
-| `ADMIN_TOKEN`     | S8     | Proteksi route peneliti                         |
-| `NEWS_SOURCE_URL` | S7     | Default RSS Ekonomi ANTARA                      |
+| `ADMIN_TOKEN`     | S8     | Proteksi route peneliti                                    |
+| `NEWS_SOURCE_URL` | S7     | Default RSS Ekonomi ANTARA                                 |
 
 ## Deploy Vercel
 

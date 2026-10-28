@@ -3,15 +3,19 @@
   "private": true,
   "type": "module",
   "packageManager": "bun@1.4.4",
-  "workspaces": ["apps/*", "packages/*", "scripts"],
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "scripts"
+  ],
   "scripts": {
     "dev": "concurrently -n web,api -c green,blue \"bun run dev:web\" \"bun run dev:api\"",
     "dev:web": "cd apps/web && bun run dev",
     "dev:api": "bun scripts/dev-api.ts",
     "build": "cd apps/web && bun run build",
-    "check": "tsc --noEmit -p tsconfig.check.json && tsc --noEmit -p tsconfig.check.tests.json && tsc --noEmit -p scripts/tsconfig.json",
+    "check": "bun --no-script check -p tsconfig.check.json && bun --no-script check -p tsconfig.check.tests.json && bun --no-script check -p scripts/tsconfig.json",
     "test": "bun test",
-    "db:migrate": "bun scripts/migrate.ts",
+    "db:migrate": "cd packages/db && bun x drizzle-kit migrate",
     "smoke:llm": "bun scripts/smoke-llm.ts"
   },
   "dependencies": {

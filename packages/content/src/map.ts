@@ -7,49 +7,43 @@ export const MAP_ROWS = 18;
 export const MAP_COLS = 24;
 
 export const MAP_DATA: readonly string[] = [
-  "DDDDDDDDDDDDDDDDDDDDDDDD",
-  "DGDDDDDDGGGJJGGGDDDDDDGD",
-  "DGDDDDDDTGGJJGGTDDDDDDGD",
-  "DGDDDDDDGGGJJGGGDDDDDDGD",
-  "DGDDPDDDGGGJJGGGDDPDDDGD",
-  "DGGGGGGGGGGJJGGGGGGGGGGD",
-  "DGGkGGdGGGGJJGGGGGhGGGGD",
-  "DGTGGGGGGGJJGGGGGGGGTGGD",
-  "DJJJJJJJJJJJJJJJJJJJJJJD",
-  "DGGGJGGGGGGSJGGGGGGGGGGD",
-  "DGGGJGGGGGGJJGGGGGGGTGGD",
-  "DGGGJGGGGGGJJGGGGGGGGGGD",
-  "DGGCJCGGGGGJJGGGGGGGGGGD",
-  "DGGGbGGGTWWJJGTGGGGGGGGD",
-  "DGTGJGGGGWWJJGGGmGgGGGGD",
-  "DGGGJGGGGGGJJGGGGEEGGGGD",
-  "DGGGGGGGGGGJJGGGGGGGGGGD",
-  "DDDDDDDDDDDDDDDDDDDDDDDD",
+  'DDDDDDDDDDDDDDDDDDDDDDDD',
+  'DGDDDDDDGGGJJGGGDDDDDDGD',
+  'DGDDDDDDTGGJJGGTDDDDDDGD',
+  'DGDDDDDDGGGJJGGGDDDDDDGD',
+  'DGDDPDDDGGGJJGGGDDPDDDGD',
+  'DGGGGGGGGGGJJGGGGGGGGGGD',
+  'DGGkGGdGGGGJJGGGGGhGGGGD',
+  'DGTGGGGGGGJJGGGGGGGGTGGD',
+  'DJJJJJJJJJJJJJJJJJJJJJJD',
+  'DGGGJGGGGGGSJGGGGGGGGGGD',
+  'DGGGJGGGGGGJJGGGGGGGTGGD',
+  'DGGGJGGGGGGJJGGGGGGGGGGD',
+  'DGGCJCGGGGGJJGGGGGGGGGGD',
+  'DGGGbGGGTWWJJGTGGGGGGGGD',
+  'DGTGJGGGGWWJJGGGmGgGGGGD',
+  'DGGGJGGGGGGJJGGGGEEGGGGD',
+  'DGGGGGGGGGGJJGGGGGGGGGGD',
+  'DDDDDDDDDDDDDDDDDDDDDDDD',
 ];
 
 export type TerrainId =
-  | "grass"
-  | "road"
-  | "wall"
-  | "water"
-  | "tree"
-  | "counter"
-  | "door"
-  | "gate";
+  'grass' | 'road' | 'wall' | 'water' | 'tree' | 'counter' | 'door' | 'gate';
 
 export interface TilePos {
   x: number;
   y: number;
 }
 
-export type InteractionId = "kasir" | "dimas" | "pak-hendra" | "pak-budi" | "vendor" | "gerbang";
+export type InteractionId =
+  'kasir' | 'dimas' | 'pak-hendra' | 'pak-budi' | 'vendor' | 'gerbang';
 
 export interface InteractionPoint extends TilePos {
   id: InteractionId;
   label: string;
 }
 
-export type NpcId = "dimas" | "pak-hendra" | "pak-budi" | "vendor";
+export type NpcId = 'dimas' | 'pak-hendra' | 'pak-budi' | 'vendor';
 
 export interface CompiledMap {
   /** terrain[y][x] */
@@ -60,60 +54,67 @@ export interface CompiledMap {
   playerSpawn: TilePos;
   npcSpawns: Record<NpcId, TilePos>;
   /** Ubin jalan kaki untuk aksi walk_to per tempat (PRD §9.6). */
-  placeAnchors: Record<"kedai" | "gudang" | "pasar" | "gerbang", TilePos>;
+  placeAnchors: Record<'kedai' | 'gudang' | 'pasar' | 'gerbang', TilePos>;
 }
 
-const MARKER_INTERACTION: Record<string, { id: InteractionId; label: string }> = {
-  k: { id: "kasir", label: "Kasir Kedai" },
-  d: { id: "dimas", label: "Dimas" },
-  h: { id: "pak-hendra", label: "Pak Hendra" },
-  b: { id: "pak-budi", label: "Pak Budi" },
-  m: { id: "vendor", label: "Vendor Misterius" },
-  g: { id: "gerbang", label: "Gerbang Kampus" },
-};
+const MARKER_INTERACTION: Record<string, { id: InteractionId; label: string }> =
+  {
+    k: { id: 'kasir', label: 'Kasir Kedai' },
+    d: { id: 'dimas', label: 'Dimas' },
+    h: { id: 'pak-hendra', label: 'Pak Hendra' },
+    b: { id: 'pak-budi', label: 'Pak Budi' },
+    m: { id: 'vendor', label: 'Vendor Misterius' },
+    g: { id: 'gerbang', label: 'Gerbang Kampus' },
+  };
 
 const MARKER_NPC: Record<string, NpcId> = {
-  d: "dimas",
-  h: "pak-hendra",
-  b: "pak-budi",
-  m: "vendor",
+  d: 'dimas',
+  h: 'pak-hendra',
+  b: 'pak-budi',
+  m: 'vendor',
 };
 
 function terrainOf(ch: string): TerrainId {
   switch (ch) {
-    case "J":
-    case "S":
-    case "d":
-    case "h":
-    case "b":
-    case "m":
-    case "g":
-      return "road";
-    case "D":
-      return "wall";
-    case "W":
-      return "water";
-    case "T":
-      return "tree";
-    case "C":
-    case "k":
-      return "counter";
-    case "P":
-      return "door";
-    case "E":
-      return "gate";
-    case "G":
+    case 'J':
+    case 'S':
+    case 'd':
+    case 'h':
+    case 'b':
+    case 'm':
+    case 'g':
+      return 'road';
+    case 'D':
+      return 'wall';
+    case 'W':
+      return 'water';
+    case 'T':
+      return 'tree';
+    case 'C':
+    case 'k':
+      return 'counter';
+    case 'P':
+      return 'door';
+    case 'E':
+      return 'gate';
+    case 'G':
     default:
-      return "grass";
+      return 'grass';
   }
 }
 
 function solidOf(terrain: TerrainId): boolean {
-  return terrain === "wall" || terrain === "water" || terrain === "tree" || terrain === "counter";
+  return (
+    terrain === 'wall' ||
+    terrain === 'water' ||
+    terrain === 'tree' ||
+    terrain === 'counter'
+  );
 }
 
 export function compileMap(rows: readonly string[] = MAP_DATA): CompiledMap {
-  if (rows.length !== MAP_ROWS) throw new Error(`Peta harus ${MAP_ROWS} baris, dapat ${rows.length}`);
+  if (rows.length !== MAP_ROWS)
+    throw new Error(`Peta harus ${MAP_ROWS} baris, dapat ${rows.length}`);
   const terrain: TerrainId[][] = [];
   const solid: boolean[][] = [];
   const interactions: InteractionPoint[] = [];
@@ -122,7 +123,10 @@ export function compileMap(rows: readonly string[] = MAP_DATA): CompiledMap {
 
   for (let y = 0; y < MAP_ROWS; y++) {
     const row = rows[y] as string;
-    if (row.length !== MAP_COLS) throw new Error(`Baris ${y} harus ${MAP_COLS} kolom, dapat ${row.length}`);
+    if (row.length !== MAP_COLS)
+      throw new Error(
+        `Baris ${y} harus ${MAP_COLS} kolom, dapat ${row.length}`,
+      );
     const tRow: TerrainId[] = [];
     const sRow: boolean[] = [];
     for (let x = 0; x < MAP_COLS; x++) {
@@ -130,17 +134,18 @@ export function compileMap(rows: readonly string[] = MAP_DATA): CompiledMap {
       const t = terrainOf(ch);
       tRow.push(t);
       sRow.push(solidOf(t));
-      if (ch === "S") playerSpawn = { x, y };
+      if (ch === 'S') playerSpawn = { x, y };
       const marker = MARKER_INTERACTION[ch];
-      if (marker) interactions.push({ id: marker.id, label: marker.label, x, y });
+      if (marker)
+        interactions.push({ id: marker.id, label: marker.label, x, y });
       const npc = MARKER_NPC[ch];
       if (npc) npcSpawns[npc] = { x, y };
     }
     terrain.push(tRow);
     solid.push(sRow);
   }
-  if (!playerSpawn) throw new Error("Peta tidak punya spawn pemain (S)");
-  for (const npc of ["dimas", "pak-hendra", "pak-budi", "vendor"] as const) {
+  if (!playerSpawn) throw new Error('Peta tidak punya spawn pemain (S)');
+  for (const npc of ['dimas', 'pak-hendra', 'pak-budi', 'vendor'] as const) {
     if (!npcSpawns[npc]) throw new Error(`Peta tidak punya spawn NPC ${npc}`);
   }
   return {

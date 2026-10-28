@@ -1,6 +1,6 @@
-import { MarketShockSchema, type MarketShockRequest } from "@juragan/contracts";
-import { chatCompletions, type MetaEnv } from "./meta";
-import { MARKET_SHOCK_FORMAT } from "./schemas";
+import { generateObject } from 'ai';
+import { MarketShockSchema, type MarketShockRequest } from '@juragan/contracts';
+import { MODEL_TIMEOUT_MS, createMetaModel, type MetaEnv } from './meta';
 
 export interface ShockProposal {
   concept_id: string;
@@ -11,34 +11,28 @@ export interface ShockProposal {
 
 const clamp = (v: number, lo = 0.85, hi = 1.3) => Math.min(hi, Math.max(lo, v));
 
-/** Model mengubah headline menjadi proposal; kode mem-clamp ke 0.85–1.30 (FR-026). Null = pakai kurasi. */
+/** Model mengubah headline menjadi proposal; kode mem-clamp ke 0,85–1,30 (FR-026). Null = pakai kurasi. */
 export async function proposeMarketShock(
   req: MarketShockRequest & { headline: string },
   env: MetaEnv,
   fetchFn: typeof fetch = fetch,
 ): Promise<ShockProposal | null> {
   try {
-    const { content } = await chatCompletions(
-      {
-        messages: [
-          {
-            role: "system",
-            content:
-              "Ubah headline ekonomi menjadi event pasar game kedai kopi. Jawab HANYA dengan JSON sesuai skema: concept_id dari enum, pengali 0.85–1.30, headline_game versi game (maks 200 karakter).",
-          },
-          { role: "user", content: req.headline },
-        ],
-        response_format: MARKET_SHOCK_FORMAT,
-        max_tokens: 300,
-      },
-      env,
-      fetchFn,
-    );
-    if (!content) return null;
-    const parsed = MarketShockSchema.safeParse(JSON.parse(content));
+    // no-schema: SDK mengambil JSON tanpa validasi; Zod + clamp milik kode (FR-026).
+    const { object } = await generateObject({
+      model: createMetaModel(env, fetchFn),
+      instructions:
+        'Ubah headline ekonomi menjadi event pasar game kedai kopi: concept_id dari enum, pengali 0.85–1.30, headline_game versi game (maks 200 karakter). Jawab HANYA JSON.',
+      prompt: req.headline,
+      output: 'no-schema',
+      maxOutputTokens: 300,
+      maxRetries: 0,
+      abortSignal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
+    });
+    const parsed = MarketShockSchema.safeParse(object);
     if (!parsed.success) {
-      // Coba terima lalu clamp bila hanya pengali yang di luar rentang.
-      const loose = JSON.parse(content) as Partial<ShockProposal>;
+      // Terima lalu clamp bila hanya pengali yang di luar rentang.
+      const loose = object as Partial<ShockProposal>;
       const retry = MarketShockSchema.safeParse({
         ...loose,
         price_multiplier: clamp(Number(loose.price_multiplier)),

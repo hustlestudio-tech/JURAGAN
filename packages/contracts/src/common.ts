@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Amplop error tunggal (PRD §9.4): { error: { code, message } }
 export const ErrorEnvelopeSchema = z.object({
@@ -10,11 +10,11 @@ export function err(code: string, message: string): ErrorEnvelope {
   return { error: { code, message } };
 }
 
-export const DbStatusSchema = z.enum(["up", "down", "unconfigured"]);
+export const DbStatusSchema = z.enum(['up', 'down', 'unconfigured']);
 export type DbStatus = z.infer<typeof DbStatusSchema>;
 
 export const HealthResponseSchema = z.object({
-  status: z.literal("ok"),
+  status: z.literal('ok'),
   db: DbStatusSchema,
   time: z.string(),
 });

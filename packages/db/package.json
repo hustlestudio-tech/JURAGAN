@@ -9,6 +9,10 @@
   },
   "dependencies": {
     "@juragan/contracts": "workspace:*",
-    "@neondatabase/serverless": "^0.10.0"
+    "@neondatabase/serverless": "^0.10.0",
+    "drizzle-orm": "^0.45.4"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.11"
   }
 }

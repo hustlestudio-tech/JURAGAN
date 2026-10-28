@@ -1,37 +1,35 @@
-import { useGameStore } from "../state/store";
+import type { ReactNode } from 'react';
+import { useGameStore } from '../state/store';
+import { formatRp } from '../lib/format';
 
-export const formatRp = (n: number) => `Rp${n.toLocaleString("id-ID")}`;
+const STAT_WRAP = 'flex min-w-0 flex-col items-center px-1';
+const STAT_LABEL = 'font-pixel text-[9px] uppercase tracking-wide text-krem/70';
+const STAT_VALUE = 'font-pixel text-xs text-krem sm:text-sm';
+
+function Stat({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className={STAT_WRAP}>
+      <span className={STAT_LABEL}>{label}</span>
+      <span className={STAT_VALUE}>{children}</span>
+    </div>
+  );
+}
 
 export function HUD() {
   const hud = useGameStore((s) => s.hud);
-  const item = "flex min-w-0 flex-col items-center px-1";
-  const label = "font-pixel text-[9px] uppercase tracking-wide text-krem/70";
-  const value = "font-pixel text-xs text-krem sm:text-sm";
   return (
     <header className="pixel-panel grid grid-cols-5 items-center gap-1 bg-rimba px-2 py-2">
-      <div className={item}>
-        <span className={label}>Minggu</span>
-        <span className={value}>{hud.week}</span>
-      </div>
-      <div className={item}>
-        <span className={label}>Kas</span>
-        <span className={`${value} ${hud.cash < 0 ? "text-red-300" : ""}`}>
-          {hud.cash < 0 ? "⚠ " : ""}
-          {formatRp(hud.cash)}
-        </span>
-      </div>
-      <div className={item}>
-        <span className={label}>Stok</span>
-        <span className={value}>{hud.stock}</span>
-      </div>
-      <div className={item}>
-        <span className={label}>Reputasi</span>
-        <span className={value}>{hud.reputation}</span>
-      </div>
-      <div className={item}>
-        <span className={label}>AP</span>
-        <span className={value}>{hud.ap}</span>
-      </div>
+      <Stat label="Minggu">{hud.week}</Stat>
+      <Stat label="Kas">
+        {hud.cash < 0 ? (
+          <span className="text-red-300">⚠ {formatRp(hud.cash)}</span>
+        ) : (
+          formatRp(hud.cash)
+        )}
+      </Stat>
+      <Stat label="Stok">{hud.stock}</Stat>
+      <Stat label="Reputasi">{hud.reputation}</Stat>
+      <Stat label="AP">{hud.ap}</Stat>
     </header>
   );
 }

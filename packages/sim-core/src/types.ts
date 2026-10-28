@@ -4,7 +4,7 @@ export interface TilePos {
   y: number;
 }
 
-export type SupplierId = "pasar" | "hendra" | "vendor";
+export type SupplierId = 'pasar' | 'hendra' | 'vendor';
 
 export interface ShopDecision {
   price: number;
@@ -37,10 +37,10 @@ export interface WeekResult {
   spoiledUnits: number;
 }
 
-export type NpcPlace = "kedai" | "gudang" | "pasar" | "gerbang";
+export type NpcPlace = 'kedai' | 'gudang' | 'pasar' | 'gerbang';
 
 export type NpcAction =
-  | { type: "walk_to"; place: NpcPlace }
-  | { type: "speak"; topic: string }
-  | { type: "offer"; offerId: string }
-  | { type: "wait" };
+  | { type: 'walk_to'; place: NpcPlace }
+  | { type: 'speak'; topic: string }
+  | { type: 'offer'; offerId: string }
+  | { type: 'wait' };

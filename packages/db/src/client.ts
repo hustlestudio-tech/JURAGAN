@@ -1,23 +1,37 @@
-import { neon } from "@neondatabase/serverless";
-import type { DbStatus } from "@juragan/contracts";
+import { sql } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
+import type { DbStatus } from '@juragan/contracts';
+import * as schema from './schema';
 
-let cached: ReturnType<typeof neon> | null = null;
+function buildDb(url: string) {
+  return drizzle(neon(url), { schema });
+}
 
-export function getSql(url: string | undefined = process.env.DATABASE_URL) {
+export type JuraganDb = ReturnType<typeof buildDb>;
+
+let cached: { url: string; db: JuraganDb } | null = null;
+
+/** Klien Drizzle mode HTTP (stateless, aman untuk serverless). Null bila URL tak diset. */
+export function getDb(
+  url: string | undefined = process.env.DATABASE_URL,
+): JuraganDb | null {
   if (!url) return null;
-  if (!cached) cached = neon(url);
-  return cached;
+  if (!cached || cached.url !== url) cached = { url, db: buildDb(url) };
+  return cached.db;
 }
 
 /** unconfigured = DATABASE_URL tidak diset (S1 sah tanpa DB); down = diset tapi tak terjangkau. */
-export async function checkDb(url: string | undefined = process.env.DATABASE_URL): Promise<DbStatus> {
-  if (!url) return "unconfigured";
+export async function checkDb(
+  url: string | undefined = process.env.DATABASE_URL,
+): Promise<DbStatus> {
+  if (!url) return 'unconfigured';
   try {
-    const sql = getSql(url);
-    if (!sql) return "unconfigured";
-    await sql`SELECT 1`;
-    return "up";
+    const db = getDb(url);
+    if (!db) return 'unconfigured';
+    await db.execute(sql`SELECT 1`);
+    return 'up';
   } catch {
-    return "down";
+    return 'down';
   }
 }

@@ -1,4 +1,5 @@
-import { chatCompletions, type MetaEnv } from "./meta";
+import { generateText } from 'ai';
+import { MODEL_TIMEOUT_MS, createMetaModel, type MetaEnv } from './meta';
 
 /** Teks biasa bertoken terbatas untuk Asisten Kontrak & hint (S4/S6). Tanpa tool. */
 export async function completeText(
@@ -9,19 +10,16 @@ export async function completeText(
   fetchFn: typeof fetch = fetch,
 ): Promise<string | null> {
   try {
-    const { content } = await chatCompletions(
-      {
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: user },
-        ],
-        max_tokens: maxTokens,
-        temperature: 0.3,
-      },
-      env,
-      fetchFn,
-    );
-    return content;
+    const { text } = await generateText({
+      model: createMetaModel(env, fetchFn),
+      instructions: system,
+      prompt: user,
+      maxOutputTokens: maxTokens,
+      temperature: 0.3,
+      maxRetries: 0,
+      abortSignal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
+    });
+    return text || null;
   } catch {
     return null;
   }

@@ -8,7 +8,9 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai-compatible": "^3.0.80",
     "@juragan/contracts": "workspace:*",
-    "@juragan/sim-core": "workspace:*"
+    "@juragan/sim-core": "workspace:*",
+    "ai": "^7.0.156"
   }
 }

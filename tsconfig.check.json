@@ -1,4 +1,10 @@
 {
   "extends": "./tsconfig.base.json",
-  "include": ["apps/*/src/**/*", "packages/*/src/**/*", "api/**/*"]
+  "include": [
+    "apps/*/src/**/*",
+    "apps/*/vite.config.ts",
+    "packages/*/src/**/*",
+    "packages/*/drizzle.config.ts",
+    "api/**/*"
+  ]
 }

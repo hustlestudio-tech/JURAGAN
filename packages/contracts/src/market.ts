@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const CONCEPT_IDS = [
-  "break-even",
-  "working-capital",
-  "cashflow-vs-profit",
-  "price-elasticity",
-  "contract-risk",
-  "supplier-verification",
+  'break-even',
+  'working-capital',
+  'cashflow-vs-profit',
+  'price-elasticity',
+  'contract-risk',
+  'supplier-verification',
 ] as const;
 
 export const MarketShockSchema = z.object({
@@ -25,7 +25,7 @@ export type MarketShockRequest = z.infer<typeof MarketShockRequestSchema>;
 
 export const MarketShockResponseSchema = z.object({
   card: MarketShockSchema.extend({ id: z.string() }),
-  origin: z.enum(["live", "curated"]),
-  source: z.enum(["model", "fallback"]),
+  origin: z.enum(['live', 'curated']),
+  source: z.enum(['model', 'fallback']),
 });
 export type MarketShockResponse = z.infer<typeof MarketShockResponseSchema>;
