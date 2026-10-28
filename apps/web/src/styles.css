@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --color-krem: #fbf5e9;
+  --color-rimba: #1f4d3a;
+  --color-kayu: #6b4226;
+  --color-emas: #e8a33d;
+
+  --font-pixel: "Silkscreen", "Courier New", monospace;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+}
+
+@utility pixel-panel {
+  border: 3px solid var(--color-kayu);
+  box-shadow: 4px 4px 0 0 rgb(0 0 0 / 0.25);
+}
+
+@utility pixel-btn {
+  border: 2px solid var(--color-kayu);
+  box-shadow: 0 3px 0 0 var(--color-kayu);
+}
+
+@utility pixel-btn-active {
+  box-shadow: 0 0 0 0 var(--color-kayu);
+  transform: translateY(3px);
+}
+
+@utility pixelated {
+  image-rendering: pixelated;
+}
+
+body {
+  background-color: var(--color-krem);
+  color: var(--color-rimba);
+  font-family: var(--font-sans);
+}

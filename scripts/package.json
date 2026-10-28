@@ -1,0 +1,9 @@
+{
+  "name": "@juragan/scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@juragan/ai-client": "workspace:*",
+    "@neondatabase/serverless": "^0.10.0"
+  }
+}

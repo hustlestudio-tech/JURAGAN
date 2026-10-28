@@ -1,0 +1,19 @@
+{
+  "name": "@juragan/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/app.ts",
+  "types": "./src/app.ts",
+  "exports": {
+    ".": "./src/app.ts"
+  },
+  "dependencies": {
+    "@juragan/ai-client": "workspace:*",
+    "@juragan/content": "workspace:*",
+    "@juragan/contracts": "workspace:*",
+    "@juragan/db": "workspace:*",
+    "@juragan/sim-core": "workspace:*",
+    "hono": "^4.0.0"
+  }
+}

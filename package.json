@@ -1,0 +1,26 @@
+{
+  "name": "juragan",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.4",
+  "workspaces": ["apps/*", "packages/*", "scripts"],
+  "scripts": {
+    "dev": "concurrently -n web,api -c green,blue \"bun run dev:web\" \"bun run dev:api\"",
+    "dev:web": "cd apps/web && bun run dev",
+    "dev:api": "bun scripts/dev-api.ts",
+    "build": "cd apps/web && bun run build",
+    "check": "tsc --noEmit -p tsconfig.check.json && tsc --noEmit -p tsconfig.check.tests.json && tsc --noEmit -p scripts/tsconfig.json",
+    "test": "bun test",
+    "db:migrate": "bun scripts/migrate.ts",
+    "smoke:llm": "bun scripts/smoke-llm.ts"
+  },
+  "dependencies": {
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0",
+    "@types/node": "^20.0.0",
+    "concurrently": "^9.0.0",
+    "typescript": "^5.0.0"
+  }
+}
